@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime, timedelta
+from db_setup import db
+from models.product import Product
 import threading
 
 app = Flask(__name__)
@@ -14,15 +16,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///products.db'
 # Set this to False to improve performance and avoid seeing unnecessary warnings.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Set up the database
-db = SQLAlchemy(app)
+db.init_app(app)
 
-
-# Define Product model
-class Product(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(100), nullable=False)
-  expiration_date = db.Column(db.Date, nullable=False)
-  
 # Initialize the database
 with app.app_context():
     db.create_all()

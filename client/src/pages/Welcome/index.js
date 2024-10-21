@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import logo from "./../../assets/fried-egg.png";
+// import RubikDoodlefrom "./../../assets/fonts/RubikDoodleShadow-Regular.ttf";
+import "./../../assets/fonts/fonts.css";
+import Stylesheet from "reactjs-stylesheet";
+
 function Welcome() {
   useEffect(() => {
     // Apply global styles to prevent scroll and remove margin/padding
@@ -11,19 +15,48 @@ function Welcome() {
       document.body.style.overflow = "auto";
     };
   }, []);
-  const welcomeStyle = {
+  const handleMouseOver = (e) => {
+    e.target.style.backgroundColor = "#FFB86C"; // Change color on hover
+  };
+
+  const handleMouseOut = (e) => {
+    e.target.style.backgroundColor = "#FFDAC1"; // Revert color on mouse out
+  };
+  return (
+    <div style={styles.welcomeStyle}>
+      <div style={styles.circleStyle}>
+        <img src={logo} alt="Logo" style={styles.logoStyle} />
+      </div>
+      <div style={styles.textStyle}>
+        <h1>Welcome!</h1>
+        <button
+          type="button"
+          style={styles.buttonStyle}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        >
+          Start Scanning!
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const styles = Stylesheet.create({
+  welcomeStyle: {
     backgroundColor: "#F0B289", // Background color
     height: "100vh", // Full viewport height
     width: "100vw", // Full viewport width
     display: "flex",
     justifyContent: "center",
+    flexDirection: "column",
     alignItems: "center",
-  };
-  const logoStyle = {
+  },
+  logoStyle: {
     width: "130px",
     height: "auto",
-  };
-  const circleStyle = {
+  },
+  circleStyle: {
     width: "200px", // Diameter of the circle
     height: "200px", // Diameter of the circle
     backgroundColor: "white", // Circle background color
@@ -33,14 +66,27 @@ function Welcome() {
     alignItems: "center",
     border: "5px solid #AC8266",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)", // Optional shadow for depth
-  };
-  return (
-    <div style={welcomeStyle}>
-      <div style={circleStyle}>
-        <img src={logo} alt="Logo" style={logoStyle} />
-      </div>
-    </div>
-  );
-}
+  },
+  textStyle: {
+    fontFamily: "Rubik Doodle Shadow",
+    color: "#FFFBFB",
+    fontSize: "32px",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  buttonStyle: {
+    padding: "10px 20px", // Vertical and horizontal padding
+    borderRadius: "30px", // Rounded corners
+    border: "none", // Remove default border
+    backgroundColor: "#FFDAC1", // Button background color
+    color: "#985C35", // Text color
+    fontSize: "32px", // Font size
+    cursor: "pointer", // Change cursor on hover
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)", // Darker shadow for depth
+    transition: "background-color 0.3s, box-shadow 0.3s", // Smooth transition on hover
+  },
+});
 
 export default Welcome;

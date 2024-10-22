@@ -1,28 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Welcome from "./pages/Welcome";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home"; // Assuming you have a Home component
 
 function App() {
-  // const [data, setData] = useState([{}]);
-
-  // useEffect(() => {
-  //   fetch("/members")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       console.log(data);
-  //     });
-  // }, []);
   return (
-    // <div>
-    //   {typeof data.members === "undefined" ? (
-    //     <p>Fetching the API</p>
-    //   ) : (
-    //     data.members.map((member, i) => <p key={i}>{member}</p>)
-    //   )}
-    // </div>
-    <div>
-      <Welcome />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/home" element={<Home />} /> Define the home route
+      </Routes>
+    </Router>
   );
 }
 

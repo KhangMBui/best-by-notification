@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import logo from "./../../assets/fried-egg.png";
-// import RubikDoodlefrom "./../../assets/fonts/RubikDoodleShadow-Regular.ttf";
 import "./../../assets/fonts/fonts.css";
 import Stylesheet from "reactjs-stylesheet";
+import { useNavigate } from "react-router-dom";
+import Logo from "../../components/Logo";
 
 function Welcome() {
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `./../Home/`;
+    navigate(path);
+  };
   useEffect(() => {
     // Apply global styles to prevent scroll and remove margin/padding
     document.body.style.margin = 0;
@@ -25,7 +31,7 @@ function Welcome() {
   return (
     <div style={styles.welcomeStyle}>
       <div style={styles.circleStyle}>
-        <img src={logo} alt="Logo" style={styles.logoStyle} />
+        <Logo />
       </div>
       <div style={styles.textStyle}>
         <h1>Welcome!</h1>
@@ -34,6 +40,7 @@ function Welcome() {
           style={styles.buttonStyle}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
+          onClick={routeChange}
         >
           Start Scanning!
         </button>
@@ -51,10 +58,6 @@ const styles = Stylesheet.create({
     justifyContent: "center",
     flexDirection: "column",
     alignItems: "center",
-  },
-  logoStyle: {
-    width: "130px",
-    height: "auto",
   },
   circleStyle: {
     width: "200px", // Diameter of the circle

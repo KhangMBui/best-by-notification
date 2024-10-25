@@ -71,3 +71,26 @@ def delete_product_by_id(id):
     return jsonify({'message': f'Product {product.name} with id {id} has been deleted successfully.'}), 200
   else:
     return jsonify({'message': f'Product with id {id} not found.'}), 404
+  
+# Route to update a product's expiration date by id
+@products_bp.route('/update_product/<int:id>', methods=['PUT'])
+def update_product(id):
+  # Get the product by its id
+  product = Product.query.get(id)
+  
+  # Check if the product exists
+  if not product:
+    return jsonify({'message': f'Product with id {id} not found'}), 404
+  # Get the new expiration date from the request data
+  data = request.get_json()
+  if 'expiration_date' not in data:
+    return jsonify({'message': 'Expiration date is required' }), 400
+  try:
+    # Parse the new expiration date
+    new_expiration_date = datetime.strptime(data['expiration_date'], '%Y-%m-%d')
+  except ValueError:
+    return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD'}), 400
+  # Update the product's expiration date
+  product.expiration_date = new_expiration_date
+  db.session.commit()
+  return jsonify({'message': f'Expiration date for product {product.name} with id {product.id} has been updated successfully'}), 200

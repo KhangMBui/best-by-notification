@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 from flask_cors import CORS
-from datetime import datetime, timedelta
+from datetime import datetime
 from db_setup import db
 from models.product import Product
 from routes.products import products_bp
@@ -20,6 +20,10 @@ app.config['MAIL_PASSWORD'] = 'omdt jihh bqho enfc'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app) 
+
+# Global variable to store recipient email
+recipient_email = None
+thread_running = False
 
 # Config SQLite database
 
@@ -40,27 +44,54 @@ with app.app_context():
 # Background task to check for expiring products
 def check_expiring_products():
   with app.app_context(): # Ensure we are inside an application context
-    products = Product.query.all()
-    today = datetime.today().date()
-    for product in products:
-      dayLeft = (product.expiration_date - today).days
-      if dayLeft <= 0:
-        send_email_notification(product, "expired", "It belongs in the street!!!")
-        print(f"Notification: {product.name} is expired.")
-      elif dayLeft <= 2:
-        send_email_notification(product, "expiring soon", "Please cook with it!")
-        print(f"Notification: {product.name} is expiring in {dayLeft} days. You better cook with it soon!")
+    # Only proceed if a recipient email is set
+    if recipient_email:
+      products = Product.query.all()
+      today = datetime.today().date()
+      for product in products:
+        dayLeft = (product.expiration_date - today).days
+        if dayLeft <= 0:
+          send_email_notification(product, "expired", "It belongs in the street!!!")
+          print(f"Notification: {product.name} is expired.")
+        elif dayLeft <= 2:
+          send_email_notification(product, "expiring soon", "Please cook with it!")
+          print(f"Notification: {product.name} is expiring in {dayLeft} days. You better cook with it soon!")
+    else:
+      print("Waiting for recipient email to be set")
     threading.Timer(86400, check_expiring_products).start()
 
+# Method to send email, notifying about expiring/expired product(s)
 def send_email_notification(product, status, action):
-  subject = f"Product {product.name} is {status}"
-  body = f"Dear user,\n\nYour product {product.name} is {status}. \n{action}."
-  msg = Message(subject, recipients=["khangbui2002@gmail.com"], body = body)
-  mail.send(msg)
-  return f'Notification email successfully sent for {product.name} ({status})'
+  if recipient_email:
+    subject = f"Product {product.name} is {status}"
+    body = f"Dear user,\n\nYour product {product.name} is {status}. \n{action}."
+    msg = Message(subject, recipients=[recipient_email], body = body)
+    mail.send(msg)
+    return f'Notification email successfully sent for {product.name} ({status})'
+  else:
+    print("No recipient email set")
+    return None
+
+# Endpoint to set recipient email from frontend
+@app.route("/set-recipient", methods=["POST"])
+def set_recipient():
+    global recipient_email, thread_running
+    data = request.get_json()
+    new_email = data.get("email")
+    if not new_email:
+        return jsonify({"error": "Email is required"}), 400
+    
+    # Update recipient email so that email is always updated
+    recipient_email = new_email
+    print(f"Recipient email updated to: {recipient_email}")
+    # Start background thread only if it's not running already
+    if not thread_running:
+        thread_running = True
+        check_expiring_products()
+    return jsonify({"message": "Recipient email set successfully!"}), 200
 
 # Start the expiration checking thread:
-check_expiring_products()  
+# check_expiring_products()  
 
 # Members API route
 @app.route("/members")

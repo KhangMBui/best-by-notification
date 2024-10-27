@@ -8,7 +8,7 @@ import Logo from "../../components/Logo";
 function Welcome() {
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = `./../Home/`;
+    let path = `./../EmailForm/`;
     navigate(path);
   };
   useEffect(() => {

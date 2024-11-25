@@ -13,8 +13,9 @@ def add_product():
   name = data['name']
   # Parse into the date and time object with specific syntax
   expiration_date = datetime.strptime(data['expiration_date'], '%Y-%m-%d')
+  user_id = data['user_id']
   # Create a new product with the given data and add it to the database
-  new_product = Product(name = name, expiration_date = expiration_date)
+  new_product = Product(name = name, expiration_date = expiration_date, user_id = user_id)
   db.session.add(new_product)
   db.session.commit()
   return jsonify({'message': 'Product added successfully'}), 200

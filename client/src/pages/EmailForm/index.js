@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from "react";
-import logo from "./../../assets/fried-egg.png";
 import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
+import axios from "axios";
 
 function EmailForm() {
+  const [email, setEmail] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/set-recipient", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (response.ok) {
+        alert("Email submitted successfully!");
+      } else {
+        alert("Failed to submit email. Please try again.");
+      }
+    } catch (error) {
+      alert("Error sending email address: " + error);
+    }
+  };
   return (
     <div style={styles.containerStyle}>
       <h1 style={styles.titleStyle}>BEST BY NOTIFICATION</h1>
       <Logo />
       <Container style={{ paddingTop: "5vh", width: "75%" }}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group style={styles.emailGroupStyle} controlId="formBasicEmail">
             <Form.Label style={styles.emailLabelStyle}>
               Enter your email:{" "}
@@ -20,6 +43,9 @@ function EmailForm() {
               style={styles.emailFormStyle}
               type="email"
               placeholder="emailaddress@mail.com"
+              value={email}
+              onChange={handleEmailChange}
+              required
             />
           </Form.Group>
           <Button style={styles.buttonStyle} variant="primary" type="submit">

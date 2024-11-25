@@ -1,12 +1,56 @@
 from datetime import datetime
 from db_setup import db
 from models.product import Product
+from models.user import User
 from flask import Blueprint, request, jsonify
 
 # Create a Blueprint for products
 products_bp = Blueprint('products', __name__)
 
-# Make a route to add a product:
+# Route to add a product for a user
+@products_bp.route('/user/<int:user_id>/add_product', methods=['POST'])
+def add_product_for_user(user_id):
+  data = request.get_json()
+  name = data.get('name')
+  expiration_date = data.get('expiration_date')
+  
+  # Validate inputs
+  if not name or not expiration_date:
+    return jsonify({'error': 'Name and expiration date are required.'}), 400
+  
+  user = User.query.get(user_id)
+  
+  # If user not found
+  if not user:
+    return jsonify({'error': f'User with id {user_id} not found'}), 404
+  
+  # Else
+  try:
+    expiration_date = datetime.strptime(expiration_date, '%Y-%m-%d')
+  except ValueError:
+    return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+  
+  # Add product for user:
+  new_product = Product(name=name, expiration_date=expiration_date, user_id=user_id)
+  db.session.add(new_product)
+  db.session.commit()
+  return jsonify({'message': f'Product {name} added for user {user.email}'}), 201
+
+# Route to get all products for a user
+@products_bp.route('/user/<int:user_id>/get_products', methods = ['GET'])
+def get_user_product(user_id):
+  user = User.query.get(user_id)
+  if not user:
+    return jsonify({'error': 'User with id {user_id} not found.'}), 404
+  
+  products = Product.query.filter_by(user_id=user_id).all()
+  return jsonify([{
+    'id': product.id,
+    'name': product.name,
+    'expiration date': product.expiration_date
+  } for product in products]), 200  
+
+# Route to add a product:
 @products_bp.route('/add_product', methods=['POST'])
 def add_product():
   data = request.get_json()

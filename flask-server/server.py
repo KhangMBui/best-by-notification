@@ -47,28 +47,34 @@ with app.app_context():
 # Background task to check for expiring products
 def check_expiring_products():
   with app.app_context(): # Ensure we are inside an application context
+    users = User.query.all()
+    today = datetime.today().date()
+    
     # Only proceed if a recipient email is set
-    if recipient_email:
-      products = Product.query.all()
-      today = datetime.today().date()
+    for user in users:
+      if not user.email:
+        print(f"User with id {user.user_id} does not have an email set.")
+        continue
+      
+      products = Product.query.filter_by(user_id = user.user_id).all()
       for product in products:
         dayLeft = (product.expiration_date - today).days
+        
         if dayLeft <= 0:
-          send_email_notification(product, "expired", "It belongs in the street!!!")
+          send_email_notification(user.email, product, "expired", "It belongs in the street!!!")
           print(f"Notification: {product.name} is expired.")
+          
         elif dayLeft <= 2:
-          send_email_notification(product, "expiring soon", "Please cook with it!")
+          send_email_notification(user.email, product, "expiring soon", "Please cook with it!")
           print(f"Notification: {product.name} is expiring in {dayLeft} days. You better cook with it soon!")
-    else:
-      print("Waiting for recipient email to be set")
     threading.Timer(86400, check_expiring_products).start()
 
 # Method to send email, notifying about expiring/expired product(s)
-def send_email_notification(product, status, action):
-  if recipient_email:
+def send_email_notification(user_email, product, status, action): 
+  if user_email:
     subject = f"Product {product.name} is {status}"
     body = f"Dear user,\n\nYour product {product.name} is {status}. \n{action}."
-    msg = Message(subject, recipients=[recipient_email], body = body)
+    msg = Message(subject, recipients=[user_email], body = body)
     mail.send(msg)
     return f'Notification email successfully sent for {product.name} ({status})'
   else:
@@ -94,13 +100,7 @@ def set_recipient():
     return jsonify({"message": "Recipient email set successfully!"}), 200
 
 # Start the expiration checking thread:
-# check_expiring_products()  
-
-# Members API route
-@app.route("/members")
-
-def members():
-  return {"members": ["Hello from the backend 1", "Hello from the backend 2", "Hello from the backend 3"]}
+check_expiring_products()  
 
 if __name__ == "__main__":
   app.run(debug=True)

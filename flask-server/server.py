@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from datetime import datetime
@@ -10,6 +11,7 @@ from routes.users import users_bp
 import threading
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)  # Initialize Bcrypt with the app
 CORS(app) # Allows cross-origin requests from React frontend
 mail = Mail(app) # instantiate the mail class 
 

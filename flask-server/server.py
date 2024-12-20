@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
 from flask_cors import CORS
+import secrets
 from datetime import datetime
 from db_setup import db
 from models.product import Product
@@ -15,6 +16,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)  # Initialize Bcrypt with the app
 CORS(app) # Allows cross-origin requests from React frontend
 mail = Mail(app) # instantiate the mail class 
+app.secret_key = secrets.token_hex(32) # 32 bytes = 64-character hex string
 
 # configuration of mail 
 app.config['MAIL_SERVER']='smtp.gmail.com'

@@ -9,6 +9,7 @@ from routes.products import products_bp
 from models.user import User
 from routes.users import users_bp
 import threading
+from flask_login import LoginManager
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)  # Initialize Bcrypt with the app
@@ -38,6 +39,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Set up the database
 db.init_app(app)
 
+# Initialize LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)  # Bind to the app
+login_manager.login_view = 'login'
+
+# User loader for Flask-Login
+@login_manager.user_loader
+def load_user(id):
+  return User.query.get(int(id))
+
 # Register blueprints
 app.register_blueprint(products_bp)
 app.register_blueprint(users_bp)
@@ -55,10 +66,10 @@ def check_expiring_products():
     # Only proceed if a recipient email is set
     for user in users:
       if not user.email:
-        print(f"User with id {user.user_id} does not have an email set.")
+        print(f"User with id {user.id} does not have an email set.")
         continue
       
-      products = Product.query.filter_by(user_id = user.user_id).all()
+      products = Product.query.filter_by(id = user.id).all()
       for product in products:
         dayLeft = (product.expiration_date - today).days
         

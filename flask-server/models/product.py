@@ -5,7 +5,7 @@ class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(100), nullable=False)
   expiration_date = db.Column(db.Date, nullable=False)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   def __init__(self, name, expiration_date, user_id):
     self.name = name
     self.expiration_date = expiration_date

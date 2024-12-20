@@ -1,12 +1,13 @@
 from db_setup import db
 from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model, UserMixin):
   __tablename__ = 'user'
   
-  user_id = db.Column(db.Integer, primary_key = True)
+  id = db.Column(db.Integer, primary_key = True, autoincrement=True)
   email = db.Column(db.String(150), unique=True, nullable=False) # User's email
   password_hash = db.Column(db.String(256), nullable=False)  # Store hashed password
+  active = db.Column(db.Boolean, default=True, nullable=False)  # Active status
   products = db.relationship('Product', backref='user', lazy=True) # Relationship with Product
   
   def set_password(self, password):
@@ -19,7 +20,15 @@ class User(db.Model):
     from server import bcrypt  # Import here to avoid circular dependency
     return bcrypt.check_password_hash(self.password_hash, password)
   
-  def __init__(self, email, password):
+  @property
+  def is_active(self):
+    return self.active  # Flask-Login checks this to see if the user is active
+
+  # def get_id(self):
+  #   return str(self.id)  # Flask-Login requires a method to return the user ID
+  
+  def __init__(self, email, password, active=True):
     self.email = email
     self.set_password(password)
+    self.active = active  # Add an active flag for the user
   

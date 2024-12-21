@@ -6,7 +6,17 @@ import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 
 function EmailForm() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -36,13 +46,31 @@ function EmailForm() {
       <Container style={{ paddingTop: "5vh", width: "75%" }}>
         <Form onSubmit={handleSubmit}>
           <Form.Group style={styles.emailGroupStyle} controlId="formBasicEmail">
-            <Form.Label style={styles.emailLabelStyle}>
-              Enter your email:{" "}
-            </Form.Label>
+            {/* <Form.Label style={styles.emailLabelStyle}>Email: </Form.Label> */}
             <Form.Control
               style={styles.emailFormStyle}
               type="email"
-              placeholder="emailaddress@mail.com"
+              placeholder="Enter your email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
+            {/* <Form.Label style={styles.emailLabelStyle}>Password: </Form.Label> */}
+            <Form.Control
+              style={styles.emailFormStyle}
+              type="password"
+              placeholder="Enter your password"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
+            {/* <Form.Label style={styles.emailLabelStyle}>
+              Confirm password:{" "}
+            </Form.Label> */}
+            <Form.Control
+              style={styles.emailFormStyle}
+              type="password"
+              placeholder="Confirm password"
               value={email}
               onChange={handleEmailChange}
               required
@@ -78,6 +106,8 @@ const styles = Stylesheet.create({
     border: "1px solid #ccc",
     fontSize: "4vw",
     paddingLeft: "4vw",
+    paddingBottom: "0.8vh",
+    marginBottom: "1vh",
   },
   emailGroupStyle: {
     display: "flex",
@@ -89,7 +119,7 @@ const styles = Stylesheet.create({
   },
   emailLabelStyle: {
     fontFamily: "GothicA1-Regular",
-    fontSize: "5vw",
+    fontSize: "4.3vw",
     paddingBottom: "0.8vh",
   },
   titleStyle: {

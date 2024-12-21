@@ -11,12 +11,14 @@ from models.user import User
 from routes.users import users_bp
 import threading
 from flask_login import LoginManager
+import os
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)  # Initialize Bcrypt with the app
 CORS(app) # Allows cross-origin requests from React frontend
 mail = Mail(app) # instantiate the mail class 
-app.secret_key = secrets.token_hex(32) # 32 bytes = 64-character hex string
+# app.secret_key = secrets.token_hex(32) # 32 bytes = 64-character hex string
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 # configuration of mail 
 app.config['MAIL_SERVER']='smtp.gmail.com'

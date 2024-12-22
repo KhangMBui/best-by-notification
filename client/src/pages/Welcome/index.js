@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import logo from "./../../assets/fried-egg.png";
+import React, { useEffect } from "react";
 import "./../../assets/fonts/fonts.css";
 import Stylesheet from "reactjs-stylesheet";
 import { useNavigate } from "react-router-dom";

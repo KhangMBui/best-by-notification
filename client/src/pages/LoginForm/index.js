@@ -5,31 +5,20 @@ import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function SignupForm() {
+function LoginForm() {
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleEmailChange = (event) => setEmail(event.target.value);
   const [isLinkHovered, setIsLinkHovered] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-
-  const handleConfirmPasswordChange = (event) =>
-    setConfirmPassword(event.target.value);
-
-  const handleEmailChange = (event) => setEmail(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/signup`,
+        `${process.env.REACT_APP_API_BASE_URL}/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -39,21 +28,21 @@ function SignupForm() {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Email submitted successfully!");
+        alert("Login successful!");
       } else {
-        alert(`Failed to signup: ${data.error}`);
+        alert(`Failed to login: ${data.error}`);
       }
     } catch (error) {
-      alert("Error signing up: " + error.message);
+      alert("Error logging in: " + error.message);
     }
   };
   return (
-    <div style={styles.signupContainerStyle}>
+    <div style={styles.loginContainerStyle}>
       <h1 style={styles.appTitleStyle}>BEST BY NOTIFICATION</h1>
-      <h2 style={styles.signupTitleStyle}>SIGN UP</h2>
+      <h2 style={styles.loginTitleStyle}>LOGIN</h2>
       <Logo />
       <Container style={{ paddingTop: "5vh", width: "75%" }}>
-        <Form onSubmit={handleSubmit} style={styles.signupFormStyle}>
+        <Form onSubmit={handleSubmit} style={styles.loginFormStyle}>
           <Form.Group style={styles.formGroupStyle} controlId="formBasicEmail">
             <Form.Control
               style={styles.inputStyle}
@@ -71,14 +60,6 @@ function SignupForm() {
               onChange={handlePasswordChange}
               required
             />
-            <Form.Control
-              style={styles.inputStyle}
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              required
-            />
           </Form.Group>
           <Button
             style={{
@@ -90,19 +71,19 @@ function SignupForm() {
             variant="primary"
             type="submit"
           >
-            Sign Up
+            Login
           </Button>
-          <div style={styles.loginLinkStyle}>
+          <div style={styles.signupLinkStyle}>
             <Link
-              to="/LoginForm"
+              to="/SignupForm"
               style={{
-                ...styles.loginLink,
-                ...(isLinkHovered ? styles.loginLinkHover : {}),
+                ...styles.signupLink,
+                ...(isLinkHovered ? styles.signupLinkHover : {}),
               }}
               onMouseEnter={() => setIsLinkHovered(true)}
               onMouseLeave={() => setIsLinkHovered(false)}
             >
-              Have an account? Login!
+              Don't have an account? Sign up here!
             </Link>
           </div>
         </Form>
@@ -135,7 +116,7 @@ const styles = Stylesheet.create({
     paddingBottom: "0.8vh",
     marginBottom: "1.7vh",
   },
-  signupFormStyle: {
+  loginFormStyle: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -155,14 +136,14 @@ const styles = Stylesheet.create({
     // paddingBottom: "1px", // Adds some space between the text and the underline
     fontSize: "8vw",
   },
-  signupTitleStyle: {
+  loginTitleStyle: {
     fontFamily: "GothicA1-Regular",
     // paddingBottom: "1px", // Adds some space between the text and the underline
     marginBottom: "5vh",
     marginTop: "-1vh",
     fontSize: "8vw",
   },
-  signupContainerStyle: {
+  loginContainerStyle: {
     alignItems: "center",
     flexDirection: "column",
     display: "flex",
@@ -172,19 +153,19 @@ const styles = Stylesheet.create({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
-  loginLinkStyle: {
+  signupLinkStyle: {
     marginTop: "1rem",
     textAlign: "end",
     color: "#1877F2",
   },
-  loginLink: {
+  signupLink: {
     textDecoration: "none",
     color: "inherit",
     "&:hover": {
       textDecoration: "underline",
     },
   },
-  loginLinkHover: {
+  signupLinkHover: {
     textDecoration: "underline",
   },
   buttonHover: {
@@ -193,4 +174,4 @@ const styles = Stylesheet.create({
   },
 });
 
-export default SignupForm;
+export default LoginForm;

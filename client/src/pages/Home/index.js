@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import logo from "./../../assets/fried-egg.png";
+import React from "react";
 import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";

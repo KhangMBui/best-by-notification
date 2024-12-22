@@ -28,6 +28,10 @@ def signup():
   new_user = User(email=email, password=password)
   db.session.add(new_user)
   db.session.commit()
+  
+  # Log the new user in after signing up
+  # login_user(new_user)
+  
   return jsonify({'message': f'User with email {email} created successfully'}), 201
 
 @users_bp.route('/delete_user', methods=['DELETE'])

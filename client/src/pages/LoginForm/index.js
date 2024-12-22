@@ -3,15 +3,17 @@ import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-  const handleEmailChange = (event) => setEmail(event.target.value);
   const [isLinkHovered, setIsLinkHovered] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleEmailChange = (event) => setEmail(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,6 +31,7 @@ function LoginForm() {
       const data = await response.json();
       if (response.ok) {
         alert("Login successful!");
+        navigate("/Home");
       } else {
         alert(`Failed to login: ${data.error}`);
       }

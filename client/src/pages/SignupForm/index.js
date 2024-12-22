@@ -5,79 +5,80 @@ import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 
-function EmailForm() {
+function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
+  const handlePasswordChange = (event) => setPassword(event.target.value);
 
-  const handleConfirmPasswordChange = (event) => {
+  const handleConfirmPasswordChange = (event) =>
     setConfirmPassword(event.target.value);
-  };
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
+  const handleEmailChange = (event) => setEmail(event.target.value);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:5000/set-recipient", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
       if (response.ok) {
         alert("Email submitted successfully!");
       } else {
-        alert("Failed to submit email. Please try again.");
+        alert(`Failed to signup: ${data.error}`);
       }
     } catch (error) {
-      alert("Error sending email address: " + error);
+      alert("Error signing up: " + error.message);
     }
   };
   return (
-    <div style={styles.containerStyle}>
-      <h1 style={styles.titleStyle}>BEST BY NOTIFICATION</h1>
+    <div style={styles.signupContainerStyle}>
+      <h1 style={styles.signupTitleStyle}>BEST BY NOTIFICATION</h1>
       <Logo />
       <Container style={{ paddingTop: "5vh", width: "75%" }}>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group style={styles.emailGroupStyle} controlId="formBasicEmail">
-            {/* <Form.Label style={styles.emailLabelStyle}>Email: </Form.Label> */}
+        <Form onSubmit={handleSubmit} style={styles.signupFormStyle}>
+          <Form.Group style={styles.formGroupStyle} controlId="formBasicEmail">
             <Form.Control
-              style={styles.emailFormStyle}
+              style={styles.inputStyle}
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={handleEmailChange}
               required
             />
-            {/* <Form.Label style={styles.emailLabelStyle}>Password: </Form.Label> */}
             <Form.Control
-              style={styles.emailFormStyle}
+              style={styles.inputStyle}
               type="password"
               placeholder="Enter your password"
-              value={email}
-              onChange={handleEmailChange}
+              value={password}
+              onChange={handlePasswordChange}
               required
             />
-            {/* <Form.Label style={styles.emailLabelStyle}>
-              Confirm password:{" "}
-            </Form.Label> */}
             <Form.Control
-              style={styles.emailFormStyle}
+              style={styles.inputStyle}
               type="password"
               placeholder="Confirm password"
-              value={email}
-              onChange={handleEmailChange}
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
               required
             />
           </Form.Group>
           <Button style={styles.buttonStyle} variant="primary" type="submit">
-            Submit
+            Sign Up
           </Button>
         </Form>
       </Container>
@@ -90,15 +91,15 @@ const styles = Stylesheet.create({
     padding: "1.3vw",
     paddingTop: "1.6vh",
     paddingBottom: "1.6vh",
-    width: "100%",
+    width: "110%",
     borderRadius: "12px",
     border: "1px solid #ccc",
     fontSize: "4vw",
-    marginTop: "2vh",
+    marginTop: "0.7vh",
     backgroundColor: "#000",
     color: "#FFF",
   },
-  emailFormStyle: {
+  inputStyle: {
     height: "3.5vh",
     width: "100%",
     padding: "1.3vh",
@@ -107,29 +108,35 @@ const styles = Stylesheet.create({
     fontSize: "4vw",
     paddingLeft: "4vw",
     paddingBottom: "0.8vh",
-    marginBottom: "1vh",
+    marginBottom: "1.7vh",
   },
-  emailGroupStyle: {
+  signupFormStyle: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "start",
+    alignItems: "center",
     flexDirection: "column",
-    marginLeft: "-5vw",
+  },
+  formGroupStyle: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    marginLeft: "-7vw",
     marginTop: "2vh",
+    width: "100%",
   },
-  emailLabelStyle: {
-    fontFamily: "GothicA1-Regular",
-    fontSize: "4.3vw",
-    paddingBottom: "0.8vh",
-  },
-  titleStyle: {
+  // emailLabelStyle: {
+  //   fontFamily: "GothicA1-Regular",
+  //   fontSize: "4.3vw",
+  //   paddingBottom: "0.8vh",
+  // },
+  signupTitleStyle: {
     fontFamily: "GothicA1-Regular",
     borderBottom: "3px solid black", // Adds a black underline
     // paddingBottom: "1px", // Adds some space between the text and the underline
     marginBottom: "5vh",
     fontSize: "8vw",
   },
-  containerStyle: {
+  signupContainerStyle: {
     alignItems: "center",
     flexDirection: "column",
     display: "flex",
@@ -141,4 +148,4 @@ const styles = Stylesheet.create({
   },
 });
 
-export default EmailForm;
+export default SignupForm;

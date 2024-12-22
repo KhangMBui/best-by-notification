@@ -10,6 +10,9 @@ class User(db.Model, UserMixin):
   active = db.Column(db.Boolean, default=True, nullable=False)  # Active status
   products = db.relationship('Product', backref='user', lazy=True) # Relationship with Product
   
+  # Relationships
+  products = db.relationship('Product', back_populates='user', lazy=True)  # Bidirectional relationship
+  
   def set_password(self, password):
     """Hashes and sets the password."""
     from server import bcrypt  # Import here to avoid circular dependency

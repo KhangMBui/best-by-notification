@@ -4,8 +4,8 @@ import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import EyeOpen from "./../../assets/eye-open.png";
-import EyeClose from "./../../assets/eye-close.png";
+import EyeOpen from "./../../assets/images/eye-open.png";
+import EyeClose from "./../../assets/images/eye-close.png";
 
 function SignupForm() {
   const [password, setPassword] = useState("");

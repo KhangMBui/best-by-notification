@@ -4,8 +4,8 @@ import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";
 import { Form, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import EyeOpen from "./../../assets/eye-open.png";
-import EyeClose from "./../../assets/eye-close.png";
+import EyeOpen from "./../../assets/images/eye-open.png";
+import EyeClose from "./../../assets/images/eye-close.png";
 
 function LoginForm() {
   const [password, setPassword] = useState("");
@@ -196,8 +196,8 @@ const styles = Stylesheet.create({
     top: "43.5%",
     transform: "translateY(-56%)",
     cursor: "pointer",
-    width: "24px",
-    height: "24px",
+    width: "22px",
+    height: "22px",
   },
 });
 

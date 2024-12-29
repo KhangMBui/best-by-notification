@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import logo from "./../assets/fried-egg.png";
+import React from "react";
+import logo from "./../assets/images/fried-egg.png";
 import Stylesheet from "reactjs-stylesheet";
 
 function Logo() {

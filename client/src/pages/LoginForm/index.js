@@ -33,8 +33,12 @@ function LoginForm() {
 
       const data = await response.json();
       if (response.ok) {
+        // Save user details in localStorage
+        sessionStorage.setItem("userId", data.user.id);
+        sessionStorage.setItem("userEmail", data.user.email);
+
         alert("Login successful!");
-        navigate("/Home");
+        navigate("/InputForm");
       } else {
         alert(`Failed to login: ${data.error}`);
       }

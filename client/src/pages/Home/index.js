@@ -122,8 +122,8 @@ const styles = Stylesheet.create({
   webcam: {
     width: "100vw", // Full width of viewport
     height: "30vh", // Full height of viewport
-    objectFit: "fill", // Crop the video to fill the space
-    marginTop: "-20vh",
+    objectFit: "contain", // Crop the video to fill the space
+    marginTop: "-5vh",
   },
   titleStyle: {
     fontFamily: "GothicA1-Regular",

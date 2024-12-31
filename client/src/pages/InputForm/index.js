@@ -3,7 +3,7 @@ import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo";
 import { Link, useNavigate } from "react-router-dom";
-
+import "./index.css";
 function InputForm() {
   const [isLinkHovered, setIsLinkHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,18 +71,18 @@ function InputForm() {
   };
 
   return (
-    <div style={styles.homeContainerStyle}>
-      <h1 style={styles.appTitleStyle}>BEST BY NOTIFICATION</h1>
-      <h2 style={styles.homeTitleStyle}>HOME</h2>
+    <div className="homeContainerStyle">
+      <h1 className="appTitleStyle">BEST BY NOTIFICATION</h1>
+      <h2 className="homeTitleStyle">HOME</h2>
       <Logo />
 
       {/* Buttons for Actions */}
-      <div style={styles.buttonContainer}>
-        <button style={styles.actionButton} onClick={toggleModal}>
+      <div className="buttonContainer">
+        <button className="actionButton" onClick={toggleModal}>
           Add Product
         </button>
         <button
-          style={styles.actionButton}
+          className="actionButton"
           onClick={() => navigate("/DatabaseView")}
         >
           View Database
@@ -90,13 +90,10 @@ function InputForm() {
       </div>
 
       {/* Sign Out Link */}
-      <div style={styles.signoutLinkStyle}>
+      <div className="signoutLinkStyle">
         <Link
           to="/LoginForm"
-          style={{
-            ...styles.signoutLink,
-            ...(isLinkHovered ? styles.signoutLinkHover : {}),
-          }}
+          className="signoutLink"
           onMouseEnter={() => setIsLinkHovered(true)}
           onMouseLeave={() => setIsLinkHovered(false)}
         >
@@ -106,9 +103,9 @@ function InputForm() {
 
       {/* Popup Modal */}
       {isModalOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContainer}>
-            <h2 style={styles.modalTitle}>Add Food Product</h2>
+        <div className="modalOverlay">
+          <div className="modalContainer">
+            <h2 className="modalTitle">Add Food Product</h2>
 
             {/* Input Fields */}
             <input
@@ -116,22 +113,22 @@ function InputForm() {
               placeholder="Product Name"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              style={styles.inputField}
+              className="inputField"
             />
 
             <input
               type="date"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)}
-              style={styles.inputField}
+              className="inputField"
             />
 
             {/* Buttons for Modal */}
-            <div style={styles.modalButtons}>
-              <button style={styles.modalActionButton} onClick={handleSubmit}>
+            <div className="modalButtons">
+              <button className="modalActionButton" onClick={handleSubmit}>
                 Submit
               </button>
-              <button style={styles.modalActionButton} onClick={toggleModal}>
+              <button className="modalActionButton" onClick={toggleModal}>
                 Cancel
               </button>
             </div>

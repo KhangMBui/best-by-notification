@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
-import Logo from "../../components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../components/Logo/Logo";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar";
 import "./index.css";
 function InputForm() {
-  const [isLinkHovered, setIsLinkHovered] = useState(false);
+  // const [isLinkHovered, setIsLinkHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
@@ -89,18 +90,6 @@ function InputForm() {
         </button>
       </div>
 
-      {/* Sign Out Link */}
-      <div className="signoutLinkStyle">
-        <Link
-          to="/LoginForm"
-          className="signoutLink"
-          onMouseEnter={() => setIsLinkHovered(true)}
-          onMouseLeave={() => setIsLinkHovered(false)}
-        >
-          Sign Out
-        </Link>
-      </div>
-
       {/* Popup Modal */}
       {isModalOpen && (
         <div className="modalOverlay">
@@ -135,6 +124,8 @@ function InputForm() {
           </div>
         </div>
       )}
+      {/* Bottom Navbar */}
+      <Navbar toggleModal={toggleModal} />
     </div>
   );
 }

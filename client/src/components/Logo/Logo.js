@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./../assets/images/fried-egg.png";
+import logo from "./../../assets/images/fried-egg.png";
 import Stylesheet from "reactjs-stylesheet";
 import "./Logo.css";
 

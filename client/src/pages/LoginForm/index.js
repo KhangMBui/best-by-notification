@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Stylesheet from "reactjs-stylesheet";
 import "./../../assets/fonts/fonts.css";
-import Logo from "../../components/Logo";
+import Logo from "../../components/Logo/Logo";
 import { Form, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import EyeOpen from "./../../assets/images/eye-open.png";

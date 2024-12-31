@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./../../assets/fonts/fonts.css";
 import Stylesheet from "reactjs-stylesheet";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../components/Logo";
+import Logo from "../../components/Logo/Logo";
 
 function Welcome() {
   let navigate = useNavigate();

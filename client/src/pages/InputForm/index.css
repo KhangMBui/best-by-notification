@@ -98,21 +98,6 @@
   background-color: #333333;
 }
 
-.signoutLinkStyle {
-  margin-top: 47vh;
-  text-align: end;
-  color: #1877f2;
-}
-
-.signoutLink {
-  text-decoration: none;
-  color: inherit;
-}
-
-.signoutLink:hover {
-  text-decoration: underline;
-}
-
 @media screen and (min-width: 1280px) {
   .homeContainerStyle {
     margin-top: 0vh;

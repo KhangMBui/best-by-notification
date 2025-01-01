@@ -4,6 +4,7 @@ import "./../../assets/fonts/fonts.css";
 import Logo from "../../components/Logo/Logo";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
+import Modal from "../../components/Modal/Modal";
 import "./index.css";
 function InputForm() {
   // const [isLinkHovered, setIsLinkHovered] = useState(false);
@@ -90,40 +91,16 @@ function InputForm() {
         </button>
       </div>
 
-      {/* Popup Modal */}
-      {isModalOpen && (
-        <div className="modalOverlay">
-          <div className="modalContainer">
-            <h2 className="modalTitle">Add Food Product</h2>
-
-            {/* Input Fields */}
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-              className="inputField"
-            />
-
-            <input
-              type="date"
-              value={expirationDate}
-              onChange={(e) => setExpirationDate(e.target.value)}
-              className="inputField"
-            />
-
-            {/* Buttons for Modal */}
-            <div className="modalButtons">
-              <button className="modalActionButton" onClick={handleSubmit}>
-                Submit
-              </button>
-              <button className="modalActionButton" onClick={toggleModal}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal Component */}
+      <Modal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        handleSubmit={handleSubmit}
+        productName={productName}
+        setProductName={setProductName}
+        expirationDate={expirationDate}
+        setExpirationDate={setExpirationDate}
+      />
       {/* Bottom Navbar */}
       <Navbar toggleModal={toggleModal} />
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Modal.css";
 
 const Modal = ({
@@ -7,6 +7,8 @@ const Modal = ({
   handleSubmit,
   productName,
   setProductName,
+  productCategory,
+  setProductCategory,
   expirationDate,
   setExpirationDate,
 }) => {
@@ -22,6 +24,8 @@ const Modal = ({
           // value={category}
           // onChange={(e) => setCategory(e.target.value)}
           className="inputField"
+          value={productCategory}
+          onChange={(e) => setProductCategory(e.target.value)}
         >
           <option value="" disabled>
             Select Product Category

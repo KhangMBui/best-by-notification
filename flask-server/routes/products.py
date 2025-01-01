@@ -13,10 +13,16 @@ def add_product_for_user(user_id):
   data = request.get_json()
   name = data.get('name')
   expiration_date = data.get('expiration_date')
+  category = data.get('category')
   
   # Validate inputs
-  if not name or not expiration_date:
-    return jsonify({'error': 'Name and expiration date are required.'}), 400
+  if not name or not expiration_date or not category:
+    return jsonify({'error': 'Name, expiration date, and category are required.'}), 400
+  
+    # Validate category (can expand this list as needed)
+  valid_categories = ['poultry', 'seafood', 'dairy', 'fruits', 'vegetables', 'grains', 'snacks', 'beverages', 'frozen', 'other']
+  if category not in valid_categories:
+    return jsonify({'error': 'Invalid category. Please select a valid category. Yours:' + category}), 400
   
   user = User.query.get(user_id)
   
@@ -31,7 +37,7 @@ def add_product_for_user(user_id):
     return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
   
   # Add product for user:
-  new_product = Product(name=name, expiration_date=expiration_date, user_id=user_id)
+  new_product = Product(name=name, category=category, expiration_date=expiration_date, user_id=user_id)
   db.session.add(new_product)
   db.session.commit()
   return jsonify({'message': f'Product {name} added for user {user.email}'}), 201
@@ -47,6 +53,7 @@ def get_user_product(user_id):
   return jsonify([{
     'id': product.id,
     'name': product.name,
+    'category': product.category,
     'expiration date': product.expiration_date
   } for product in products]), 200  
 
@@ -58,8 +65,9 @@ def add_product():
   # Parse into the date and time object with specific syntax
   expiration_date = datetime.strptime(data['expiration_date'], '%Y-%m-%d')
   user_id = data['user_id']
+  category = data['category']
   # Create a new product with the given data and add it to the database
-  new_product = Product(name = name, expiration_date = expiration_date, user_id = user_id)
+  new_product = Product(name = name, category=category, expiration_date = expiration_date, user_id = user_id)
   db.session.add(new_product)
   db.session.commit()
   return jsonify({'message': 'Product added successfully'}), 200
@@ -71,6 +79,7 @@ def get_products():
   return jsonify([{
     'id': product.id,
     'name': product.name, 
+    'category': product.category,
     'expiration date': product.expiration_date.strftime('%Y-%m-%d')} for product in products
   ]), 200
 
@@ -82,6 +91,7 @@ def get_product_by_name(name):
     return jsonify({
       'id': product.id,
       'name': product.name,
+      'category': product.category,
       'expiration date': product.expiration_date.strftime('%Y-%m-%d')
     }), 200
   else: 
@@ -98,6 +108,7 @@ def get_product_by_id(id):
     return jsonify({
       'id': product.id,
       'name': product.name,
+      'category': product.category,
       'expiration date': product.expiration_date.strftime('%Y-%m-%d')
     }), 200
   else: 

@@ -11,6 +11,7 @@ function InputForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
+  const [productCategory, setProductCategory] = useState("");
   const navigate = useNavigate();
 
   // Handles opening/closing the modal
@@ -23,7 +24,7 @@ function InputForm() {
     event.preventDefault();
 
     // Validate inputs:
-    if (!productName || !expirationDate) {
+    if (!productName || !expirationDate || !productCategory) {
       alert("Please fill out all fields.");
       return;
     }
@@ -37,6 +38,7 @@ function InputForm() {
     // Prepare request payload
     const requestBody = {
       name: productName,
+      category: productCategory,
       expiration_date: expirationDate,
     };
 
@@ -67,6 +69,7 @@ function InputForm() {
     // Clear inputs after submission
     setProductName("");
     setExpirationDate("");
+    setProductCategory("");
 
     // Close the modal
     // toggleModal();
@@ -98,6 +101,8 @@ function InputForm() {
         handleSubmit={handleSubmit}
         productName={productName}
         setProductName={setProductName}
+        productCategory={productCategory}
+        setProductCategory={setProductCategory}
         expirationDate={expirationDate}
         setExpirationDate={setExpirationDate}
       />

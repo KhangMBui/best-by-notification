@@ -47,3 +47,10 @@
   background-color: #ffd1b3;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
 }
+
+@media screen and (min-width: 1280px) {
+  .circleStyle {
+    width: 260px;
+    height: 260px;
+  }
+}

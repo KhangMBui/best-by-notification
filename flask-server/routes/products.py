@@ -40,6 +40,9 @@ def add_product_for_user(user_id):
   new_product = Product(name=name, category=category, expiration_date=expiration_date, user_id=user_id)
   db.session.add(new_product)
   db.session.commit()
+  
+  # check_single_product_expiration(user, new_product) # This function is not defined here
+  
   return jsonify({'message': f'Product {name} added for user {user.email}'}), 201
 
 # Route to get all products for a user

@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
 from flask_cors import CORS
-import secrets
 from datetime import datetime
 from db_setup import db
 from models.product import Product
@@ -69,12 +68,14 @@ def check_expiring_products():
     
     # Only proceed if a recipient email is set
     for user in users:
+      print(user.email)
       if not user.email:
         print(f"User with id {user.id} does not have an email set.")
         continue
       
-      products = Product.query.filter_by(id = user.id).all()
+      products = Product.query.filter_by(user_id = user.id).all()
       for product in products:
+        print(product.name)
         dayLeft = (product.expiration_date - today).days
         
         if dayLeft <= 0:

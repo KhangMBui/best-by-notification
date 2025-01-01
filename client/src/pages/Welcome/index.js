@@ -88,6 +88,7 @@ const styles = Stylesheet.create({
     cursor: "pointer", // Change cursor on hover
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)", // Darker shadow for depth
     transition: "background-color 0.3s, box-shadow 0.3s", // Smooth transition on hover
+    fontFamily: "GothicA1-Regular",
   },
 });
 

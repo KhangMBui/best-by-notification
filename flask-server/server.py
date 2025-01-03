@@ -10,11 +10,12 @@ from models.user import User
 from routes.users import users_bp
 import threading
 from flask_login import LoginManager
+from flask_session import Session
 import os
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)  # Initialize Bcrypt with the app
-CORS(app) # Allows cross-origin requests from React frontend
+CORS(app, supports_credentials=True, origins=["http://192.168.0.101:3000", "http://localhost:3000"]) # Allows cross-origin requests from React frontend
 mail = Mail(app) # instantiate the mail class 
 # app.secret_key = secrets.token_hex(32) # 32 bytes = 64-character hex string
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
@@ -25,20 +26,29 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_DEFAULT_SENDER'] = 'khangbui2023@gmail.com'
 app.config['MAIL_USERNAME'] = 'khangbui2023@gmail.com'
 app.config['MAIL_PASSWORD'] = 'omdt jihh bqho enfc'
-app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_TLS'] = False  
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app) 
 
+# Session and cookie configuration
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+# app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'
+app.config['SESSION_COOKIE_SECURE'] = False
+
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions on the server filesystem
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+Session(app)
+
 # Global variable to store recipient email
-recipient_email = None
 thread_running = False
 
 # Config SQLite database
-
-# Tells Flask-SQLAlchemy to use an SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # Set this to False to improve performance and avoid seeing unnecessary warnings.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 # Set up the database
 db.init_app(app)
 
@@ -46,6 +56,13 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)  # Bind to the app
 login_manager.login_view = 'login'
+login_manager.login_message = "Unauthorized access. Please log in first."
+login_manager.login_message_category = "error"
+
+# Custom unauthorized handler
+@login_manager.unauthorized_handler
+def unauthorized():
+    return jsonify({'error': 'Unauthorized access. Please log in first.'}), 401
 
 # User loader for Flask-Login
 @login_manager.user_loader
@@ -98,24 +115,6 @@ def send_email_notification(user_email, product, status, action):
   else:
     print("No recipient email set")
     return None
-
-# Endpoint to set recipient email from frontend
-@app.route("/set-recipient", methods=["POST"])
-def set_recipient():
-    global recipient_email, thread_running
-    data = request.get_json()
-    new_email = data.get("email")
-    if not new_email:
-        return jsonify({"error": "Email is required"}), 400
-    
-    # Update recipient email so that email is always updated
-    recipient_email = new_email
-    print(f"Recipient email updated to: {recipient_email}")
-    # Start background thread only if it's not running already
-    if not thread_running:
-        thread_running = True
-        check_expiring_products()
-    return jsonify({"message": "Recipient email set successfully!"}), 200
 
 # Start the expiration checking thread:
 check_expiring_products()  

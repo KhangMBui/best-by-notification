@@ -90,8 +90,12 @@ def get_current_user():
 @users_bp.route('/logout', methods=['POST'])
 @login_required
 def logout():
+  print("Logout route accessed")  # Add this log
   logout_user()
-  return jsonify({'message': 'Logged out successfully'}), 200
+  response = jsonify({'message': 'Logged out successfully'})
+  response.headers['Cache-Control'] = 'no-store'
+  response.set_cookie('session', '', expires=0)  # Clear session cookie
+  return response
 
 @users_bp.route('/protected', methods=['GET'])
 @login_required

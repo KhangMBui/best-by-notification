@@ -7,7 +7,7 @@ import "./index.css";
 function Welcome() {
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = `./../SignupForm/`;
+    let path = `./../LoginForm/`;
     navigate(path);
   };
   useEffect(() => {

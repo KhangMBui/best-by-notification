@@ -25,6 +25,7 @@ function LoginForm() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include", // Allow cookies
           body: JSON.stringify({ email, password }),
         }
       );

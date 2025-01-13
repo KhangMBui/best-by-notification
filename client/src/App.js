@@ -6,6 +6,7 @@ import SignupForm from "./pages/SignupForm";
 import LoginForm from "./pages/LoginForm";
 import InputForm from "./pages/InputForm";
 import History from "./pages/History";
+import ResetForm from "./pages/ResetForm";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/SignupForm" element={<SignupForm />} />
         <Route path="/LoginForm" element={<LoginForm />} />
         <Route path="InputForm" element={<InputForm />} />
-        <Route path="/history" element={<History />} />
+        <Route path="/History" element={<History />} />
+        <Route path="/ResetForm" element={<ResetForm />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Navbar.css"; // Assuming you are using the same CSS file for Navbar
 
 const Navbar = ({ toggleModal }) => {
@@ -21,13 +21,13 @@ const Navbar = ({ toggleModal }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message);
+        alert(data.message);
         navigate("/LoginForm");
       } else {
-        console.log("Logout failed: ", response.statusText);
+        alert("Logout failed: ", response.statusText);
       }
     } catch (error) {
-      console.log("Error logging out: ", error);
+      alert("Error logging out: ", error);
     }
   };
 

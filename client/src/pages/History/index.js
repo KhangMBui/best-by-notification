@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./../../assets/fonts/fonts.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Modal from "../../components/Modal/Modal";
+import ProductBar from "../../components/ProductBar/ProductBar";
 import "./index.css";
 
 function History() {
@@ -11,6 +12,7 @@ function History() {
   const [productName, setProductName] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [productCategory, setProductCategory] = useState("");
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   // Handles opening/closing the modal
@@ -71,6 +73,35 @@ function History() {
     setProductCategory("");
   };
 
+  const fetchProducts = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/user/${userId}/get_products`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      console.log("API Response:", data); // Check the structure of the response
+      if (response.ok) {
+        if (data) {
+          setProducts(data);
+        } else {
+          console.log("No products found.");
+        }
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.log("Error fetching products:", error);
+      alert(
+        "Failed to fetch products. Please try again later. Error: " + error
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <div className="historyContainerStyle">
       <h1 className="appTitleStyle">BEST BY NOTIFICATION</h1>
@@ -88,6 +119,25 @@ function History() {
         expirationDate={expirationDate}
         setExpirationDate={setExpirationDate}
       />
+
+      {/* Render Product Bars */}
+      <div className="productBars">
+        {products.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          products.map((product, index) => (
+            <ProductBar
+              productName={product.name}
+              productCategory={product.category}
+              expirationDate={product.expiration_date}
+              handleDelete={() => {
+                alert(`Delete product: ${product.name}`);
+              }}
+            ></ProductBar>
+          ))
+        )}
+      </div>
+
       {/* Bottom Navbar */}
       <Navbar toggleModal={toggleModal} />
     </div>
